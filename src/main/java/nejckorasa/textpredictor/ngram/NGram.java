@@ -14,7 +14,7 @@ public class NGram {
     }
 
     public NGram(String... tokens) {
-        this.tokens = Arrays.asList(tokens.clone());
+        this(Arrays.asList(tokens.clone()));
     }
 
     public static NGram ofString(String string) {

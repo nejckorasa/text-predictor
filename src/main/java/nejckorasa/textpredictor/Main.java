@@ -3,7 +3,7 @@ package nejckorasa.textpredictor;
 import nejckorasa.textpredictor.ngram.NGram;
 import nejckorasa.textpredictor.ngram.NGramModel;
 import nejckorasa.textpredictor.ngram.NGramModelBuilder;
-import nejckorasa.textpredictor.tokenizer.WordsTokenizer;
+import nejckorasa.textpredictor.tokenizer.TextTokenizers;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 public class Main {
     public static void main(String[] args) throws IOException, URISyntaxException {
         String corpus = readFile("frankenstein.txt");
-        NGramModel nGramModel = new NGramModelBuilder(corpus, new WordsTokenizer(), List.of(2, 3)).build();
+        NGramModel nGramModel = new NGramModelBuilder(corpus, TextTokenizers.WORDS, List.of(2, 3)).build();
 
         System.out.println("Next token prediction:");
         System.out.println(nGramModel.predictNextToken(NGram.ofString("i am")));

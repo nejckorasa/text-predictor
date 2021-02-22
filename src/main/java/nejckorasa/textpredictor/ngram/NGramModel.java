@@ -42,7 +42,7 @@ public class NGramModel {
      * Returns empty list if there are no occurrences of ngram.
      *
      * @param ngram          ngram to predict next tokens for
-     * @param numberOfTokens number of next tokens to predict, ordered by highest probability
+     * @param numberOfTokens number of next token candidates to return, ordered probability
      * @return tokens and their probabilities
      */
     public List<TokenProbability> calculateNextTokenProbabilities(NGram ngram, int numberOfTokens) {
@@ -56,15 +56,13 @@ public class NGramModel {
     }
 
     /**
-     * Predicts token that is most likely to appear after ngram
+     * Predicts token that is most likely to appear after ngram.
      * Returns {@link Optional#empty()} if there are no occurrences of ngram.
      *
      * @param ngram ngram to predict next token for
      * @return optional token with probability
      */
     public Optional<TokenProbability> predictNextToken(NGram ngram) {
-        Objects.requireNonNull(ngram);
-        if (getCount(ngram) == 0) return Optional.empty();
         return calculateNextTokenProbabilities(ngram, 1).stream().findFirst();
     }
 
