@@ -1,4 +1,4 @@
-package nejckorasa.textpredictor;
+package nejckorasa.textpredictor.ngram;
 
 import java.util.ArrayList;
 import java.util.Collection;

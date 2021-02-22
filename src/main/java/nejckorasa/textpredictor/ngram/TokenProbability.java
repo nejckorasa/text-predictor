@@ -1,4 +1,4 @@
-package nejckorasa.textpredictor;
+package nejckorasa.textpredictor.ngram;
 
 public class TokenProbability {
     private final String token;
@@ -19,6 +19,6 @@ public class TokenProbability {
 
     @Override
     public String toString() {
-        return "TokenProbability{token='%s', probability=%s}".formatted(token, probability);
+        return String.format("TokenProbability{token='%s', probability=%s}", token, probability);
     }
 }

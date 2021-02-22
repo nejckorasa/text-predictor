@@ -1,4 +1,4 @@
-package nejckorasa.textpredictor;
+package nejckorasa.textpredictor.ngram;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +17,7 @@ public class NGram {
         this.tokens = Arrays.asList(tokens.clone());
     }
 
-    public static NGram forString(String string) {
+    public static NGram ofString(String string) {
         return new NGram(Arrays.asList(string.split(" ")));
     }
 

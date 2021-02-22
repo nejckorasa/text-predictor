@@ -1,5 +1,7 @@
 package nejckorasa.textpredictor;
 
+import nejckorasa.textpredictor.ngram.NGram;
+import nejckorasa.textpredictor.ngram.NGramGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
@@ -11,22 +13,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 class NGramGeneratorTest {
 
     @Test
-    public void canGenerateNgramsForEmptySequence() {
+    public void generatesNgramsForEmptyTokens() {
         Collection<NGram> ngrams = NGramGenerator.generateNgrams(emptyList(), 2);
         assertThat(ngrams).containsExactly(new NGram(emptyList()));
     }
 
     @Test
-    public void canGenerateNgramsBiggerThanSequenceSize() {
-        List<String> sequence = List.of("a", "b", "c");
-        Collection<NGram> ngrams = NGramGenerator.generateNgrams(sequence, 5);
-        assertThat(ngrams).containsExactly(new NGram(sequence));
+    public void generatesNgramsBiggerThanTokensSize() {
+        List<String> tokens = List.of("a", "b", "c");
+        Collection<NGram> ngrams = NGramGenerator.generateNgrams(tokens, 5);
+        assertThat(ngrams).containsExactly(new NGram(tokens));
     }
 
     @Test
-    public void canGenerateUnigrams() {
-        List<String> sequence = List.of("a", "b", "c", "d", "e", "f", "g");
-        Collection<NGram> ngrams = NGramGenerator.generateNgrams(sequence, 1);
+    public void generatesUnigrams() {
+        List<String> tokens = List.of("a", "b", "c", "d", "e", "f", "g");
+        Collection<NGram> ngrams = NGramGenerator.generateNgrams(tokens, 1);
         assertThat(ngrams).containsExactly(
                 new NGram(List.of("a")),
                 new NGram(List.of("b")),
@@ -40,7 +42,7 @@ class NGramGeneratorTest {
 
 
     @Test
-    public void canGenerateTrigrams() {
+    public void generatesTrigrams() {
         List<String> sequence = List.of("a", "b", "c", "d", "e", "f", "g");
         Collection<NGram> ngrams = NGramGenerator.generateNgrams(sequence, 3);
         assertThat(ngrams).containsExactly(
