@@ -10,22 +10,15 @@ public class NGramModel {
     private final HashMap<NGram, Integer> ngramsMap;
     private final HashMap<String, Integer> tokensMap;
 
-    /**
-     * Builds ngram model of ngrams and tokens
-     *
-     * @param ngrams ngrams
-     * @param tokens tokens
-     */
     public NGramModel(Collection<NGram> ngrams, Collection<String> tokens) {
         ngramsMap = new HashMap<>();
         tokensMap = new HashMap<>();
-        addNGrams(ngrams);
-        addTokens(tokens);
+        ngrams.forEach(nGram -> ngramsMap.compute(nGram, (_ngram, count) -> (count == null) ? 1 : count + 1));
+        tokens.forEach(token -> tokensMap.compute(token, (_token, count) -> (count == null) ? 1 : count + 1));
     }
 
     /**
-     * Counts occurrences of ngram.
-     * Token count is used for Ngrams with size 1.
+     * Counts occurrences of ngram. Token count is used for Ngrams with size 1.
      *
      * @param ngram ngram
      * @return ngram count
@@ -41,17 +34,15 @@ public class NGramModel {
      * Calculates next token probabilities - candidate tokens with highest probability to appear after ngram.
      * Returns empty list if there are no occurrences of ngram.
      *
-     * @param ngram          ngram to predict next tokens for
-     * @param numberOfTokens number of next token candidates to return, ordered probability
+     * @param ngram ngram to predict next tokens for
      * @return tokens and their probabilities
      */
-    public List<TokenProbability> calculateNextTokenProbabilities(NGram ngram, int numberOfTokens) {
+    public List<TokenProbability> calculateNextTokenProbabilities(NGram ngram) {
         Objects.requireNonNull(ngram);
         if (getCount(ngram) == 0) return emptyList();
         return tokensMap.keySet().stream()
                 .map(token -> new TokenProbability(token, calculateProbability(ngram.addToken(token))))
-                .sorted(comparing(TokenProbability::getProbability).reversed())
-                .limit(numberOfTokens)
+                .sorted(comparing(TokenProbability::getProbability).reversed().thenComparing(TokenProbability::getToken))
                 .collect(toList());
     }
 
@@ -63,7 +54,7 @@ public class NGramModel {
      * @return optional token with probability
      */
     public Optional<TokenProbability> predictNextToken(NGram ngram) {
-        return calculateNextTokenProbabilities(ngram, 1).stream().findFirst();
+        return calculateNextTokenProbabilities(ngram).stream().findFirst();
     }
 
     /**
@@ -74,18 +65,17 @@ public class NGramModel {
      * @return sequence of next tokens
      */
     public List<String> predictNextTokens(NGram ngram, int numberOfTokens) {
-        NGram currentGram = Objects.requireNonNull(ngram);
-        List<String> tokens = new ArrayList<>();
+        Objects.requireNonNull(ngram);
 
         int count = 0;
+        List<String> tokens = new ArrayList<>();
         while (count < numberOfTokens) {
-            Optional<String> nextToken = predictNextToken(currentGram).map(TokenProbability::getToken);
+            Optional<String> nextToken = predictNextToken(ngram).map(TokenProbability::getToken);
             if (nextToken.isEmpty()) break;
             tokens.add(nextToken.get());
-            currentGram = currentGram.addTokenAndShiftLeft(nextToken.get());
+            ngram = ngram.addTokenAndShiftLeft(nextToken.get());
             count++;
         }
-
         return tokens;
     }
 
@@ -100,13 +90,5 @@ public class NGramModel {
         return ngram.size() == 1
                 ? getCount(ngram) / (double) tokensMap.size()
                 : getCount(ngram) / (double) getCount(ngram.shiftRight());
-    }
-
-    private void addNGrams(Collection<NGram> ngrams) {
-        ngrams.forEach(nGram -> ngramsMap.compute(nGram, (_ngram, count) -> (count == null) ? 1 : count + 1));
-    }
-
-    private void addTokens(Collection<String> tokens) {
-        tokens.forEach(token -> tokensMap.compute(token, (_token, count) -> (count == null) ? 1 : count + 1));
     }
 }

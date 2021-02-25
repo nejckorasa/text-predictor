@@ -17,18 +17,18 @@ import java.util.stream.Stream;
 public class Main {
     public static void main(String[] args) throws IOException, URISyntaxException {
         String corpus = readFile("frankenstein.txt");
-        NGramModel nGramModel = new NGramModelBuilder(corpus, TextTokenizers.WORDS, List.of(2, 3)).build();
+        NGramModel nGramModel = new NGramModelBuilder(corpus, TextTokenizers.CASE_INSENSITIVE_WORDS, List.of(2, 3)).build();
 
         System.out.println("Next token prediction:");
-        System.out.println(nGramModel.predictNextToken(NGram.ofString("i am")));
+        System.out.println(nGramModel.predictNextToken(NGram.of("i am")));
         System.out.println("Next token probabilities:");
-        System.out.println(nGramModel.calculateNextTokenProbabilities(new NGram("ugly"), 5));
+        System.out.println(nGramModel.calculateNextTokenProbabilities(NGram.of("ugly")));
 
         System.out.println("Ngram probability:");
-        System.out.println(nGramModel.calculateProbability(new NGram("so")));
+        System.out.println(nGramModel.calculateProbability(NGram.of("so")));
 
         System.out.println("Predicting text:");
-        nGramModel.predictNextTokens(NGram.ofString("i do"), 20).forEach(token -> System.out.print(token + " "));
+        nGramModel.predictNextTokens(NGram.of("i do"), 20).forEach(token -> System.out.print(token + " "));
     }
 
     static String readFile(String fileName) throws IOException, URISyntaxException {

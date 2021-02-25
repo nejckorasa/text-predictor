@@ -1,7 +1,9 @@
 package nejckorasa.textpredictor.ngram;
 
+import nejckorasa.textpredictor.tokenizer.TextTokenizer;
+import nejckorasa.textpredictor.tokenizer.TextTokenizers;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,16 +15,28 @@ public class NGram {
         this.tokens = tokens;
     }
 
-    public NGram(String... tokens) {
-        this(Arrays.asList(tokens.clone()));
+    public static NGram of(String string, TextTokenizer tokenizer) {
+        return new NGram(tokenizer.tokenize(string));
     }
 
-    public static NGram ofString(String string) {
-        return new NGram(Arrays.asList(string.split(" ")));
+    public static NGram of(String string) {
+        return of(string, TextTokenizers.CASE_INSENSITIVE_WORDS);
     }
 
     public int size() {
         return tokens.size();
+    }
+
+    public NGram shiftLeft() {
+        List<String> newTokens = new ArrayList<>(tokens);
+        newTokens.remove(0);
+        return new NGram(newTokens);
+    }
+
+    public NGram shiftRight() {
+        List<String> newTokens = new ArrayList<>(tokens);
+        newTokens.remove(tokens.size() - 1);
+        return new NGram(newTokens);
     }
 
     public NGram addToken(String token) {
@@ -35,18 +49,6 @@ public class NGram {
         List<String> newTokens = new ArrayList<>(tokens);
         newTokens.add(token);
         newTokens.remove(0);
-        return new NGram(newTokens);
-    }
-
-    public NGram shiftLeft() {
-        List<String> newTokens = new ArrayList<>(tokens);
-        newTokens.remove(0);
-        return new NGram(newTokens);
-    }
-
-    public NGram shiftRight() {
-        List<String> newTokens = new ArrayList<>(tokens);
-        newTokens.remove(tokens.size() - 1);
         return new NGram(newTokens);
     }
 
