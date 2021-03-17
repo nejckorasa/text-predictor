@@ -19,7 +19,7 @@ public class NGramModelTest {
 
     @Test
     public void buildsModelAndPredictions() {
-        String corpus = FileReader.readFile("./samples/frankenstein.txt").orElseThrow();
+        String corpus = FileReader.readFile("./samples/frankenstein.txt");
         NGramModel nGramModel = new NGramModelBuilder(corpus, CASE_INSENSITIVE_WORDS, List.of(2, 3)).build();
         assertNotNull(nGramModel);
 

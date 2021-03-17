@@ -3,7 +3,9 @@ package nejckorasa.textpredictor;
 import nejckorasa.textpredictor.files.FileReader;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.nio.file.NoSuchFileException;
+
+import static org.assertj.core.api.Assertions.*;
 
 public class FileReaderTest {
 
@@ -13,7 +15,7 @@ public class FileReaderTest {
     }
 
     @Test
-    public void returnsEmptyIfFileNotFound() {
-        assertThat(FileReader.readFile("./samples/something.txt")).isEmpty();
+    public void throwsIfFileNotFound() {
+        assertThatExceptionOfType(NoSuchFileException.class).isThrownBy(() -> FileReader.readFile("./samples/something.txt"));
     }
 }

@@ -3,12 +3,11 @@ package nejckorasa.textpredictor.ngram;
 import nejckorasa.textpredictor.tokenizer.TextTokenizer;
 import nejckorasa.textpredictor.tokenizer.TextTokenizers;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class NGram implements Serializable {
+public class NGram {
     private final List<String> tokens;
 
     public NGram(List<String> tokens) {

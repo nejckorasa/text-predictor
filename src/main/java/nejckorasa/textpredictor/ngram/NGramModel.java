@@ -1,13 +1,12 @@
 package nejckorasa.textpredictor.ngram;
 
-import java.io.Serializable;
 import java.util.*;
 
 import static java.util.Collections.emptyList;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
-public class NGramModel implements Serializable {
+public class NGramModel {
     private final HashMap<NGram, Integer> ngramsMap;
     private final HashMap<String, Integer> tokensMap;
 
