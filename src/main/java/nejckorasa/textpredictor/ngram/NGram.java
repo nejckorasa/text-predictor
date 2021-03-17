@@ -3,11 +3,12 @@ package nejckorasa.textpredictor.ngram;
 import nejckorasa.textpredictor.tokenizer.TextTokenizer;
 import nejckorasa.textpredictor.tokenizer.TextTokenizers;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class NGram {
+public class NGram implements Serializable {
     private final List<String> tokens;
 
     public NGram(List<String> tokens) {
@@ -49,6 +50,22 @@ public class NGram {
         List<String> newTokens = new ArrayList<>(tokens);
         newTokens.add(token);
         newTokens.remove(0);
+        return new NGram(newTokens);
+    }
+
+    /**
+     * Returns a new ngram by shifting it to the left (removing the first element) until new ngram has {@param newNgramSize}
+     */
+    public NGram shiftLeftToSize(int newNgramSize) {
+        if (newNgramSize > size()) {
+            throw new IllegalStateException("New ngram size needs to be bigger than current size");
+        }
+        List<String> newTokens = new ArrayList<>(tokens);
+        int count = 0;
+        while (count < size() - newNgramSize) {
+            newTokens.remove(0);
+            count++;
+        }
         return new NGram(newTokens);
     }
 

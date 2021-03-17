@@ -19,6 +19,6 @@ public class TokenProbability {
 
     @Override
     public String toString() {
-        return String.format("TokenProbability{token='%s', probability=%s}", token, probability);
+        return String.format("%s,%.3f", token, probability);
     }
 }

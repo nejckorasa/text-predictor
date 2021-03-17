@@ -9,13 +9,13 @@ import java.util.List;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 class NGramGeneratorTest {
 
     @Test
-    public void generatesNgramsForEmptyTokens() {
-        Collection<NGram> ngrams = NGramGenerator.generateNgrams(emptyList(), 2);
-        assertThat(ngrams).containsExactly(new NGram(emptyList()));
+    public void cannotGenerateNgramsForEmptyTokens() {
+        assertThatIllegalArgumentException().isThrownBy(() -> NGramGenerator.generateNgrams(emptyList(), 2));
     }
 
     @Test
@@ -39,7 +39,6 @@ class NGramGeneratorTest {
                 new NGram(List.of("g"))
         );
     }
-
 
     @Test
     public void generatesTrigrams() {

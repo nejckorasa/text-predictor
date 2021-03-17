@@ -1,12 +1,13 @@
 package nejckorasa.textpredictor.ngram;
 
+import java.io.Serializable;
 import java.util.*;
 
 import static java.util.Collections.emptyList;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
-public class NGramModel {
+public class NGramModel implements Serializable {
     private final HashMap<NGram, Integer> ngramsMap;
     private final HashMap<String, Integer> tokensMap;
 
@@ -42,6 +43,7 @@ public class NGramModel {
         if (getCount(ngram) == 0) return emptyList();
         return tokensMap.keySet().stream()
                 .map(token -> new TokenProbability(token, calculateProbability(ngram.addToken(token))))
+                .filter(token -> token.getProbability() != 0)
                 .sorted(comparing(TokenProbability::getProbability).reversed().thenComparing(TokenProbability::getToken))
                 .collect(toList());
     }

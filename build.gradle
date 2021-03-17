@@ -1,18 +1,44 @@
 plugins {
     id 'java'
+    id 'io.quarkus'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
-
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+
+    annotationProcessor "org.projectlombok:lombok:1.18.14"
+    testAnnotationProcessor "org.projectlombok:lombok:1.18.14"
+    compileOnly "org.projectlombok:lombok:1.18.14"
+    testCompileOnly "org.projectlombok:lombok:1.18.14"
+
+    implementation 'io.quarkus:quarkus-picocli'
+    implementation 'io.quarkus:quarkus-arc'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testImplementation 'org.assertj:assertj-core:3.19.0'
+    testImplementation 'io.quarkus:quarkus-junit5'
+}
+
+group 'text-predictor'
+version '1.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
 }
 
 test {
